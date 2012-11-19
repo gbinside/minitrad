@@ -1,5 +1,5 @@
 <?php
-include('minitrad/translation.php');
+require('minitrad/translation.php');
 ?>
 
 <html>
@@ -19,6 +19,10 @@ include('minitrad/translation.php');
 	<li> "this is !lingua" ==&gt; <?php print t("this is !lingua", array('!lingua'=>'italiano &nbsp;')); ?></li>
 	<li> "this translation is missing" ==&gt; <?php print t("this translation is missing"); ?></li>
 	<li> "_text_place_1" ==&gt; <?php print t("_text_place_1"); ?></li>
+  <?php for ($i=1; $i<4; $i++): ?>
+  <li> there is/are <?php print $i ?> stone[s] ==&gt; <?php print format_plural($i, "There is @count stone", "There are @count stones") ?></li>
+  <?php endfor ?>
+  
 </ul>
 
 

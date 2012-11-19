@@ -18,3 +18,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Thanks to Drupal 6 Core Team for some function 
 and to vlad.andersen@gmail.com for spyc http://code.google.com/p/spyc/
+
+The default password for the editor is "password"

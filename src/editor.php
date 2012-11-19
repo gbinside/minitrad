@@ -3,7 +3,7 @@ include('translation.php');
 
 #LOGIN
 $pwd = isset($_REQUEST['pwd']) && !empty($_REQUEST['pwd']) ? $_REQUEST['pwd'] : null;
-if ( (isset($_COOKIE["LoggedEditor"]) && $_COOKIE["LoggedEditor"] ) || ('p4ssw0rd'==$pwd)) {
+if ( (isset($_COOKIE["LoggedEditor"]) && $_COOKIE["LoggedEditor"] ) || ('password'==$pwd)) {
     $logged=true;
     setcookie("LoggedEditor", 1, time()+3600);
 } else {
