@@ -242,7 +242,9 @@ $( function () {
 		$('#risultati tbody tr').slice(0,10).show();
 		$('.pagination li').eq(0).addClass('active');
 		$('.pagination li').click(function () {
-		    var pag = parseInt($(this).find('a').html());
+		  var pag = parseInt($(this).find('a').html());
+			$('.pagination li').removeClass('active');
+			$('.pagination li').eq(pag-1).addClass('active');
 			$('#risultati tbody tr').hide();
 			$('#risultati tbody tr').slice(10*(pag-1),10*pag).show();
 			
