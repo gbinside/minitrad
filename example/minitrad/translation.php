@@ -70,6 +70,7 @@ class AutodetectLanguageButKeepTheOneInSessionIfExists extends Language {
                   if (file_exists($fname)) {
                       $this->language = $pieces[0];
                       setcookie("minitrad_langcode", $this->language, time()+3600);
+                      break;
                   }
               }
             }            
