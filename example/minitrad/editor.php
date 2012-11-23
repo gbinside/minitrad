@@ -1,6 +1,11 @@
 <?php
 include('translation.php');
 
+function teaser($stringa) {
+	$s = strip_tags($stringa);
+	return substr ( $s ,0 ,100) . (strlen($s)>100?'...':'');
+}
+
 #LOGIN
 $pwd = isset($_REQUEST['pwd']) && !empty($_REQUEST['pwd']) ? $_REQUEST['pwd'] : null;
 if ( (isset($_COOKIE["LoggedEditor"]) && $_COOKIE["LoggedEditor"] ) || ('password'==$pwd)) {
@@ -49,7 +54,7 @@ if ($logged) {
 	}
 	
 	#EDIT
-	$edit_key = isset($_REQUEST['edit']) && !empty($_REQUEST['edit']) ? base64_decode ( $_REQUEST['edit'] ) : null;
+	$edit_key = isset($_REQUEST['edit']) && !empty($_REQUEST['edit']) ? urldecode  ( $_REQUEST['edit'] ) : null;	
 	if ($edit_key) {
 	    $_REQUEST['search'] = $edit_key;
 	}
@@ -128,7 +133,17 @@ if ($logged) {
 
 <?php if ($search_string): 
 	if (!empty($risultati)):
-	?>			
+	?>		
+	<!-- PAGINAZIONE RICERCA -->
+		<?php if (count($risultati)>10):?>
+		    <div class="pagination">
+			    <ul>
+				<?php for ($i=1; $i<=(count($risultati)-1)/10+1; $i++): ?>
+			    <li><a href="#"><?php print $i ?></a></li>
+				<?php endfor ?>
+			    </ul>
+		    </div>
+		<?php endif ?>	
 	<table class="table table-striped table-bordered table-hover" id="risultati">
 		<caption><?php print t("Results for");?> "<?php print $search_string ?>"</caption>
 		<thead>
@@ -144,8 +159,8 @@ if ($logged) {
 			<tr>
 				<?php foreach ($table_head as $k): ?>
 					<td>
-          <?php if ($k==$chiave): ?><a href="?edit=<?php print base64_encode($riga[$chiave]) ?>"><?php else:?><?php endif ?>
-<?php if (array_key_exists( $k , $riga)) { print $riga[$k]; } else {print '&nbsp;';} ?>
+          <?php if ($k==$chiave): ?><a href="?edit=<?php print urlencode($riga[$chiave]) ?>"><?php else:?><?php endif ?>
+<?php if (array_key_exists( $k , $riga)) { print teaser($riga[$k]); } else {print '&nbsp;';} ?>
           <?php if ($k==$chiave): ?></a><?php else:?><?php endif ?>
           </td>
 				<?php endforeach ?>	
@@ -156,6 +171,7 @@ if ($logged) {
 			<?php endforeach ?>
 		</tbody>
 	</table>
+	
 	<?php else: ?>	
     <div id="notfound">
 		  <div class="well"><?php print t("no results");?></div>
@@ -166,7 +182,7 @@ if ($logged) {
   <h2><?php print t("New");?></h2>
   <fieldset>					
   <label><?php print t("Placeholder/Key");?></label>
-  <input type="text" name="key" placeholder="<?php print t("Placeholder/Key");?>" value="<?php print $search_string ?>" />
+  <input type="text" name="key" placeholder="<?php print t("Placeholder/Key");?>" value="<?php print $search_string ?>" />  
   <?php foreach($lingue as $langcode): ?>
     <label><?php print $langcode?></label>
     <textarea name="<?php print $langcode?>"><?php
@@ -220,6 +236,18 @@ $( function () {
 		$(this).attr('action', "?search="+$('[name="key"]').val());
 		return true;
 	});
+	
+	<?php if (count($risultati)>10):?>
+		$('#risultati tbody tr').hide();
+		$('#risultati tbody tr').slice(0,10).show();
+		$('.pagination li').eq(0).addClass('active');
+		$('.pagination li').click(function () {
+		    var pag = parseInt($(this).find('a').html());
+			$('#risultati tbody tr').hide();
+			$('#risultati tbody tr').slice(10*(pag-1),10*pag).show();
+			
+		});
+	<?php endif ?>
 });
 </script>
 </html>
